@@ -1,0 +1,28 @@
+### Post Patrick
+POST http://localhost:8080/student
+Content-Type: application/json
+
+{
+  "vorname": "Patrick",
+  "nachname": "Hnilicka",
+  "geschlecht": "m",
+  "geburtsdatum": "1989-06-25"
+}
+
+### Post Petra
+
+POST http://localhost:8080/student
+Content-Type: application/json
+
+{
+  "vorname": "Petra",
+  "nachname": "Müller",
+  "geschlecht": "f",
+  "geburtsdatum": "1990-06-25"
+}
+
+### Get all the messages
+GET http://localhost:8080/student/5
+
+### Get all the messages
+DELETE http://localhost:8080/student/1

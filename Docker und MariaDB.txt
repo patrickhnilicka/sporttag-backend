@@ -1,0 +1,4 @@
+- mariadb image pullen (docker pull mariadb --> latest, oder z.Bsp. docker pull mariadb:10.5)
+- docker run -p 127.0.0.1:3306:3306  --name mdb -e MARIADB_ROOT_PASSWORD=mypass -d mariadb:latest
+- docker exec -it mdb mariadb --user root -pmypass
+- CREATE DATABASE sporttag 
