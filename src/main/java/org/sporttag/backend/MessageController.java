@@ -22,7 +22,7 @@ public class MessageController {
     }
 
     @GetMapping("student")
-    List<Student> getStudents(){
+    List<StudentViewModel> getStudents(){
         return studentService.getStudents();
     }
 

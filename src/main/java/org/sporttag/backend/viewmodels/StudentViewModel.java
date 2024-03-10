@@ -3,6 +3,7 @@ package org.sporttag.backend.viewmodels;
 import java.sql.Date;
 
 public class StudentViewModel {
+    private Long id;
     private String vorname;
     private String nachname;
     private String geschlecht;
@@ -15,7 +16,9 @@ public class StudentViewModel {
     public StudentViewModel() {
     }
 
-    public StudentViewModel(String vorname, String nachname, String geschlecht, Date geburtsdatum, String klasse, String sportklasse, Long sportklassenId, String sportlehrerKuerzel) {
+
+    public StudentViewModel(Long id, String vorname, String nachname, String geschlecht, Date geburtsdatum, String klasse, String sportklasse, Long sportklassenId, String sportlehrerKuerzel) {
+        this.id = id;
         this.vorname = vorname;
         this.nachname = nachname;
         this.geschlecht = geschlecht;
@@ -24,6 +27,14 @@ public class StudentViewModel {
         this.sportklasse = sportklasse;
         this.sportklassenId = sportklassenId;
         this.sportlehrerKuerzel = sportlehrerKuerzel;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getVorname() {
