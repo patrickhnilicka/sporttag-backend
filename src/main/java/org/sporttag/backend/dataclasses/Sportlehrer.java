@@ -45,8 +45,14 @@ public class Sportlehrer {
         this.kuerzel = kuerzel;
     }
 
-    public Sportlehrer(Long id, String vorname, String nachname, String kuerzel) {
+    private Sportlehrer(Long id, String vorname, String nachname, String kuerzel) {
         this.id = id;
+        this.vorname = vorname;
+        this.nachname = nachname;
+        this.kuerzel = kuerzel;
+    }
+
+    public Sportlehrer(String vorname, String nachname, String kuerzel) {
         this.vorname = vorname;
         this.nachname = nachname;
         this.kuerzel = kuerzel;

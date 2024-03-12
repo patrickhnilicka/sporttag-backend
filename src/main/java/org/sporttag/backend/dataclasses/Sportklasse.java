@@ -14,8 +14,13 @@ public class Sportklasse {
     @ManyToOne
     private Sportlehrer sportlehrer;
 
-    public Sportklasse(Long id, String klassenname, Sportlehrer sportlehrer) {
+    private Sportklasse(Long id, String klassenname, Sportlehrer sportlehrer) {
         this.id = id;
+        this.klassenname = klassenname;
+        this.sportlehrer = sportlehrer;
+    }
+
+    public Sportklasse(String klassenname, Sportlehrer sportlehrer) {
         this.klassenname = klassenname;
         this.sportlehrer = sportlehrer;
     }

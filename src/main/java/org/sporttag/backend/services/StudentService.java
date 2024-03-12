@@ -17,7 +17,7 @@ public class StudentService {
         this.db = db;
     }
 
-    public StudentViewModel getStudentViewModel(Long id){
+    public StudentViewModel getStudentViewModel(Long id) {
         Student student = db.findById(id).orElse(new Student());
         StudentViewModel studentViewModel = new StudentViewModel(student.getId(), student.getVorname(), student.getNachname(), student.getGeschlecht(),
                 student.getGeburtsdatum(), student.getKlasse(), student.getRiege().getSportklassen().getKlassenname(),
@@ -31,7 +31,7 @@ public class StudentService {
     }
 
     public List<StudentViewModel> getStudents() {
-        List<Student> students =  db.findAll();
+        List<Student> students = db.findAll();
         List<StudentViewModel> studentViewModels = new ArrayList<>();
         students.forEach(student -> {
             studentViewModels.add(getStudentViewModel(student.getId()));

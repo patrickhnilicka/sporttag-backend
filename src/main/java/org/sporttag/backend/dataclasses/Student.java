@@ -22,8 +22,7 @@ public class Student {
     public Student() {
     }
 
-    public Student(Long id, String vorname, String nachname, String geschlecht, Date geburtsdatum, String klasse, Riege riege) {
-        this.id = id;
+    public Student(String vorname, String nachname, String geschlecht, Date geburtsdatum, String klasse, Riege riege) {
         this.vorname = vorname;
         this.nachname = nachname;
         this.geschlecht = geschlecht;
