@@ -4,6 +4,7 @@ import org.sporttag.backend.dataclasses.Sportklasse;
 import org.sporttag.backend.dataclasses.Student;
 import org.sporttag.backend.dto.ExcelStudentDataDto;
 import org.sporttag.backend.services.DocumentService;
+import org.sporttag.backend.services.RiegeSportklassenService;
 import org.sporttag.backend.services.SportklasseService;
 import org.sporttag.backend.services.StudentService;
 import org.sporttag.backend.viewmodels.StudentViewModel;
@@ -22,11 +23,14 @@ public class MessageController {
     private DocumentService documentService;
     private SportklasseService sportklasseService;
 
-    public MessageController(StudentService studentService, RestTemplateBuilder restTemplateBuilder, DocumentService documentService, SportklasseService sportklasseService) {
+    private RiegeSportklassenService riegeSportklassenService;
+
+    public MessageController(StudentService studentService, RestTemplateBuilder restTemplateBuilder, DocumentService documentService, SportklasseService sportklasseService, RiegeSportklassenService riegeSportklassenService) {
         this.studentService = studentService;
         this.restTemplateBuilder = restTemplateBuilder;
         this.documentService = documentService;
         this.sportklasseService = sportklasseService;
+        this.riegeSportklassenService = riegeSportklassenService;
     }
 
     @GetMapping("student")
@@ -36,7 +40,7 @@ public class MessageController {
 
     @GetMapping("/student/{id}")
     public StudentViewModel getStudent(@PathVariable Long id) {
-        return studentService.getStudentViewModel(id);
+        return studentService.getStudentById(id);
     }
 
     @PostMapping("/student")
@@ -55,6 +59,8 @@ public class MessageController {
         String filename = file.getOriginalFilename();
 
         ExcelStudentDataDto excelStudentDataDtos = documentService.getStudentsFromExcel(fileContent, filename);
+        excelStudentDataDtos.sportklasseDtos().forEach(s -> riegeSportklassenService.getOrCreateSportklasse(s));
+        excelStudentDataDtos.studentDtos().forEach(s -> studentService.createStudent(s));
         return "";
     }
 

@@ -1,13 +1,12 @@
 package org.sporttag.backend.dataclasses;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "sportlehrer")
 public class Sportlehrer {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String vorname;
     private String nachname;

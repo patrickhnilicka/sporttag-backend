@@ -1,6 +1,5 @@
 package org.sporttag.backend.repositories;
 
-import org.sporttag.backend.dataclasses.Sportklasse;
 import org.sporttag.backend.dataclasses.Sportlehrer;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
@@ -10,5 +9,5 @@ public interface SportlehrerRepository extends ListCrudRepository<Sportlehrer, L
 
     @Query("SELECT s FROM Sportlehrer s WHERE s.kuerzel = :kuerzel")
     Sportlehrer findSportlehrerByKuerzel(
-            @Param("name") String kuerzel);
+            @Param("kuerzel") String kuerzel);
 }

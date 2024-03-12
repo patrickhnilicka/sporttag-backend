@@ -2,7 +2,9 @@ package org.sporttag.backend.services;
 
 import org.sporttag.backend.dataclasses.Sportlehrer;
 import org.sporttag.backend.repositories.SportlehrerRepository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class SportlehrerService {
     private SportlehrerRepository db;
 

@@ -54,3 +54,7 @@ CREATE TABLE IF NOT EXISTS student
             ON DELETE CASCADE
             ON UPDATE RESTRICT
 );
+
+ALTER TABLE riege ADD COLUMN IF NOT EXISTS  (isdefault BOOLEAN NOT NULL);
+ALTER TABLE riege
+    ADD UNIQUE INDEX(isdefault, sportklassen_id);

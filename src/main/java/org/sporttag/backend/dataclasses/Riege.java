@@ -4,25 +4,32 @@ package org.sporttag.backend.dataclasses;
 import jakarta.persistence.*;
 
 @Entity
-
 @Table(name = "riege")
-
 public class Riege {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private int nummer;
+
+    private boolean isdefault;
 
     @ManyToOne
     private Sportklasse sportklassen;
 
-    public Riege(Long id, int nummer, Sportklasse sportklassen) {
+    private Riege(Long id, int nummer, boolean isdefault, Sportklasse sportklassen) {
         this.id = id;
         this.nummer = nummer;
+        this.isdefault = isdefault;
         this.sportklassen = sportklassen;
     }
 
-    public Riege() {
+    public Riege(int nummer, boolean isdefault, Sportklasse sportklassen) {
+        this.nummer = nummer;
+        this.isdefault = isdefault;
+        this.sportklassen = sportklassen;
     }
+
+    public Riege(){}
 
     public Long getId() {
         return id;

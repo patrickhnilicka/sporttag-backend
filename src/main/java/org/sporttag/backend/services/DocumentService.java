@@ -55,7 +55,7 @@ public class DocumentService {
 
     private ExcelStudentDataDto toExcelDataDto(List<ExcelStudent> excelStudents) {
         List<StudentDto> studentDtos = excelStudents.stream().map(s -> toStudentDto(s)).toList();
-        List<SportklasseDto> sportklasseDtos = excelStudents.stream().map(s -> toSportklasseDto(s)).toList();
+        List<SportklasseDto> sportklasseDtos = excelStudents.stream().map(s -> toSportklasseDto(s)).distinct().toList();
 
         return new ExcelStudentDataDto(studentDtos, sportklasseDtos);
     }
