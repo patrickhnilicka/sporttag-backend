@@ -1,9 +1,7 @@
 package org.sporttag.backend.services;
 
-import org.sporttag.backend.dataclasses.Riege;
-import org.sporttag.backend.dataclasses.Sportklasse;
+import org.sporttag.backend.entities.Riege;
 import org.sporttag.backend.repositories.RiegeRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 @Service

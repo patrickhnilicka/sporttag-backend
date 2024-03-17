@@ -1,8 +1,8 @@
 package org.sporttag.backend.services;
 
-import org.sporttag.backend.dataclasses.Riege;
-import org.sporttag.backend.dataclasses.Sportklasse;
-import org.sporttag.backend.dataclasses.Sportlehrer;
+import org.sporttag.backend.entities.Riege;
+import org.sporttag.backend.entities.Sportklasse;
+import org.sporttag.backend.entities.Sportlehrer;
 import org.sporttag.backend.dto.SportklasseDto;
 import org.springframework.stereotype.Service;
 
@@ -19,13 +19,13 @@ public class RiegeSportklassenService {
         this.sportlehrerService = sportlehrerService;
     }
 
-    public Sportklasse getOrCreateSportklasse(SportklasseDto sportklasseDto){
-        Sportklasse sportklasse = sportklasseService.findSportklasseByName(sportklasseDto.name());
+    public Sportklasse getOrCreateSportklasse(SportklasseDto sportklasseDto, Long sporttagId){
+        Sportklasse sportklasse = sportklasseService.findSportklasseByName(sportklasseDto.name(), sporttagId);
         if(sportklasse != null){
             return sportklasse;
         }
         Sportlehrer sportlehrer = sportlehrerService.getOrCreateSportlehrer(sportklasseDto.sportlehrerkuerzel());
-        sportklasse = new Sportklasse(sportklasseDto.name(), sportlehrer);
+        sportklasse = new Sportklasse(sportklasseDto.name(), sportlehrer, sporttagId);
         sportklasseService.saveSportklasse(sportklasse);
         getOrCreateDefaultRiegeForSportklasse(sportklasse);
         return sportklasse;
@@ -42,8 +42,8 @@ public class RiegeSportklassenService {
         return riege;
     }
 
-    public Riege getOrCreateDefaultRiegeForSportklasse(String sportklasseName){
-        Sportklasse sportklasse = sportklasseService.getSportklasse(sportklasseName);
+    public Riege getOrCreateDefaultRiegeForSportklasse(String sportklasseName, Long sporttagId){
+        Sportklasse sportklasse = sportklasseService.getSportklasse(sportklasseName, sporttagId);
         return getOrCreateDefaultRiegeForSportklasse(sportklasse);
     }
 }

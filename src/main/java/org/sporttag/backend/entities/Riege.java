@@ -1,4 +1,4 @@
-package org.sporttag.backend.dataclasses;
+package org.sporttag.backend.entities;
 
 
 import jakarta.persistence.*;

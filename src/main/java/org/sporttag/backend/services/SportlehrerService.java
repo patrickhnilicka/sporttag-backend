@@ -1,6 +1,6 @@
 package org.sporttag.backend.services;
 
-import org.sporttag.backend.dataclasses.Sportlehrer;
+import org.sporttag.backend.entities.Sportlehrer;
 import org.sporttag.backend.repositories.SportlehrerRepository;
 import org.springframework.stereotype.Service;
 

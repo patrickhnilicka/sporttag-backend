@@ -1,4 +1,4 @@
-package org.sporttag.backend.dataclasses;
+package org.sporttag.backend.entities;
 
 import jakarta.persistence.*;
 
@@ -11,16 +11,20 @@ public class Sportklasse {
     private String klassenname;
     @ManyToOne
     private Sportlehrer sportlehrer;
+    @Column(name = "sporttag_id")
+    private Long sporttagId;
 
-    private Sportklasse(Long id, String klassenname, Sportlehrer sportlehrer) {
+    private Sportklasse(Long id, String klassenname, Sportlehrer sportlehrer, Long sporttagId) {
         this.id = id;
         this.klassenname = klassenname;
         this.sportlehrer = sportlehrer;
+        this.sporttagId = sporttagId;
     }
 
-    public Sportklasse(String klassenname, Sportlehrer sportlehrer) {
+    public Sportklasse(String klassenname, Sportlehrer sportlehrer, Long sporttagId) {
         this.klassenname = klassenname;
         this.sportlehrer = sportlehrer;
+        this.sporttagId = sporttagId;
     }
 
     public Sportklasse() {
@@ -48,5 +52,13 @@ public class Sportklasse {
 
     public void setKlassenname(String klassenname) {
         this.klassenname = klassenname;
+    }
+
+    public Long getSporttagId() {
+        return sporttagId;
+    }
+
+    public void setSporttagId(Long sporttagId) {
+        this.sporttagId = sporttagId;
     }
 }
