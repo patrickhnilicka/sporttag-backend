@@ -1,5 +1,6 @@
 package org.sporttag.backend.services;
 
+import org.sporttag.backend.dto.SportklasseDto;
 import org.sporttag.backend.entities.Sportklasse;
 import org.sporttag.backend.entities.Sportlehrer;
 import org.sporttag.backend.repositories.SportklasseRepository;
@@ -22,16 +23,26 @@ public class SportklasseService {
         return toSportklasseViewModel(db.findSportklasseByName(name, sportagId));
     }
 
-    public Sportklasse getSportklasse(String name, Long sporttagId){
-        return db.findSportklasseByName(name, sporttagId);
+    public Long getSportklasse(String name, Long sporttagId){
+        return db.findSportklasseByName(name, sporttagId).getId();
     }
 
     public void saveSportklasse(Sportklasse sportklasse){
         db.save(sportklasse);
     }
 
-    public Sportklasse findSportklasseByName(String name, Long sporttagId){
-        return db.findSportklasseByName(name, sporttagId);
+    public Long saveNewSportklasseForNameAndSportlehrerId(String name, Long sportlehrerId, Long sporttagId){
+        Sportklasse sportklasse = new Sportklasse(name, sportlehrerId,  sporttagId);
+        db.save(sportklasse);
+        return sportklasse.getId();
+    }
+
+    public Long findSportklasseByName(String name, Long sporttagId){
+        Sportklasse sportklasse = db.findSportklasseByName(name, sporttagId);
+        if(sportklasse == null){
+            return null;
+        }
+        return sportklasse.getId();
     }
     public List<SportklasseViewModel> findAllBySporttag(Long sporttagId){ return db.findAllBySporttag(sporttagId).stream().map(s -> toSportklasseViewModel(s)).toList();}
 

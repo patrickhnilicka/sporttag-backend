@@ -28,7 +28,7 @@ public class DocumentService {
         this.restTemplateBuilder = restTemplateBuilder;
     }
 
-    public ExcelStudentDataDto getStudentsFromExcel(byte[] file, String filename) {
+    public List<ExcelStudentDataDto> getStudentsFromExcel(byte[] file, String filename) {
         MultiValueMap<String, String> fileMap = new LinkedMultiValueMap<>();
         ContentDisposition contentDisposition = ContentDisposition
                 .builder("form-data")
@@ -53,11 +53,9 @@ public class DocumentService {
         return toExcelDataDto(Arrays.stream(excelStudents).toList());
     }
 
-    private ExcelStudentDataDto toExcelDataDto(List<ExcelStudent> excelStudents) {
-        List<StudentDto> studentDtos = excelStudents.stream().map(s -> toStudentDto(s)).toList();
-        List<SportklasseDto> sportklasseDtos = excelStudents.stream().map(s -> toSportklasseDto(s)).distinct().toList();
-
-        return new ExcelStudentDataDto(studentDtos, sportklasseDtos);
+    private List<ExcelStudentDataDto> toExcelDataDto(List<ExcelStudent> excelStudents) {
+        return excelStudents.stream().map(es -> new ExcelStudentDataDto(es.vorname(), es.nachname(), es.gender(),
+                es.klasseBuchstabe() + es.klasseBuchstabe(),es.geburtstag(), es.sportklasse(), es.lehrpersonKuerzel())).toList();
     }
 
     private StudentDto toStudentDto(ExcelStudent excelStudent) {

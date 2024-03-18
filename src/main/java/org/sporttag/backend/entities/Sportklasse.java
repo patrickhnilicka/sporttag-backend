@@ -10,20 +10,26 @@ public class Sportklasse {
     private Long id;
     private String klassenname;
     @ManyToOne
+    @JoinColumn(insertable = false, updatable = false)
     private Sportlehrer sportlehrer;
-    @Column(name = "sporttag_id")
-    private Long sporttagId;
 
-    private Sportklasse(Long id, String klassenname, Sportlehrer sportlehrer, Long sporttagId) {
-        this.id = id;
+    @Column(name="sportlehrer_id")
+    private Long sportlehrerId;
+
+    public Sportklasse(String klassenname, Long sportlehrerId, Long sporttagId) {
         this.klassenname = klassenname;
-        this.sportlehrer = sportlehrer;
+        this.sportlehrerId = sportlehrerId;
         this.sporttagId = sporttagId;
     }
 
-    public Sportklasse(String klassenname, Sportlehrer sportlehrer, Long sporttagId) {
+    @Column(name = "sporttag_id")
+    private Long sporttagId;
+
+    private Sportklasse(Long id, String klassenname, Sportlehrer sportlehrer, Long sportlehrerId, Long sporttagId) {
+        this.id = id;
         this.klassenname = klassenname;
         this.sportlehrer = sportlehrer;
+        this.sportlehrerId = sportlehrerId;
         this.sporttagId = sporttagId;
     }
 

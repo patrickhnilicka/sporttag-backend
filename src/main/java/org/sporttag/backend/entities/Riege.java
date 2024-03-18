@@ -14,7 +14,11 @@ public class Riege {
     private boolean isdefault;
 
     @ManyToOne
+    @JoinColumn(insertable = false, updatable = false)
     private Sportklasse sportklassen;
+
+    @Column(name = "sportklassen_id")
+    private Long sportklassenId;
 
     private Riege(Long id, int nummer, boolean isdefault, Sportklasse sportklassen) {
         this.id = id;
@@ -23,10 +27,10 @@ public class Riege {
         this.sportklassen = sportklassen;
     }
 
-    public Riege(int nummer, boolean isdefault, Sportklasse sportklassen) {
+    public Riege(int nummer, boolean isdefault, Long sportklassenId) {
         this.nummer = nummer;
         this.isdefault = isdefault;
-        this.sportklassen = sportklassen;
+        this.sportklassenId = sportklassenId;
     }
 
     public Riege(){}

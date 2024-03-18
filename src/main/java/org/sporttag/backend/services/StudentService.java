@@ -14,11 +14,8 @@ import java.util.Optional;
 public class StudentService {
     private StudentRepository db;
 
-    private RiegeSportklassenService riegeSportklassenService;
-
-    public StudentService(StudentRepository db, RiegeSportklassenService riegeSportklassenService) {
+    public StudentService(StudentRepository db) {
         this.db = db;
-        this.riegeSportklassenService = riegeSportklassenService;
     }
 
     public StudentViewModel getStudentById(Long id) {
@@ -55,9 +52,8 @@ public class StudentService {
         db.delete(student);
     }
 
-    public Student createStudent(StudentDto studentDto, Long sporttagId) {
-        Riege riege = riegeSportklassenService.getOrCreateDefaultRiegeForSportklasse(studentDto.sportklasse(), sporttagId);
-        Student student = new Student(studentDto.vorname(), studentDto.nachname(), studentDto.geschlecht(), studentDto.geburtstag(), studentDto.klasse(), riege);
+    public Student createStudentForRiege(StudentDto studentDto, Long riegeId, Long sporttagId) {
+        Student student = new Student(studentDto.vorname(), studentDto.nachname(), studentDto.geschlecht(), studentDto.geburtstag(), studentDto.klasse(), riegeId);
         db.save(student);
         return student;
     }

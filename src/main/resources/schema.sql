@@ -57,4 +57,4 @@ CREATE TABLE IF NOT EXISTS student
 
 ALTER TABLE riege ADD COLUMN IF NOT EXISTS  (isdefault BOOLEAN NOT NULL);
 ALTER TABLE riege
-    ADD UNIQUE INDEX(isdefault, sportklassen_id);
+    ADD UNIQUE INDEX IF NOT EXISTS (isdefault, sportklassen_id);

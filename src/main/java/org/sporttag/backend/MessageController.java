@@ -1,6 +1,5 @@
 package org.sporttag.backend;
 
-import org.sporttag.backend.entities.Sportklasse;
 import org.sporttag.backend.entities.Sporttag;
 import org.sporttag.backend.entities.Student;
 import org.sporttag.backend.dto.ExcelStudentDataDto;
@@ -22,16 +21,16 @@ public class MessageController {
     private RestTemplateBuilder restTemplateBuilder;
     private DocumentService documentService;
     private SportklasseService sportklasseService;
-    private RiegeSportklassenService riegeSportklassenService;
     private SporttagService sporttagService;
+    private ExcelStudentCreationService excelStudentService;
 
-    public MessageController(StudentService studentService, RestTemplateBuilder restTemplateBuilder, DocumentService documentService, SportklasseService sportklasseService, RiegeSportklassenService riegeSportklassenService, SporttagService sporttagService) {
+    public MessageController(StudentService studentService, RestTemplateBuilder restTemplateBuilder, DocumentService documentService, SportklasseService sportklasseService, SporttagService sporttagService, ExcelStudentCreationService excelStudentService) {
         this.studentService = studentService;
         this.restTemplateBuilder = restTemplateBuilder;
         this.documentService = documentService;
         this.sportklasseService = sportklasseService;
-        this.riegeSportklassenService = riegeSportklassenService;
         this.sporttagService = sporttagService;
+        this.excelStudentService = excelStudentService;
     }
 
     @GetMapping("/students/{sporttagId}")
@@ -55,14 +54,13 @@ public class MessageController {
     }
 
     @PostMapping(value = "/studentsFromExcel")
-    public String uploadStudentsFromExcel(@RequestParam("file") MultipartFile file, @RequestParam("sporttagid") Long sporttagId) throws Exception {
+    public String uploadStudentsFromExcel(@RequestParam("file") MultipartFile file, @RequestParam("sporttagid") String sporttagId) throws Exception {
         byte[] fileContent = file.getBytes();
         String filename = file.getOriginalFilename();
 
-        ExcelStudentDataDto excelStudentDataDtos = documentService.getStudentsFromExcel(fileContent, filename);
-        excelStudentDataDtos.sportklasseDtos().forEach(s -> riegeSportklassenService.getOrCreateSportklasse(s, sporttagId));
-        excelStudentDataDtos.studentDtos().forEach(s -> studentService.createStudent(s, sporttagId));
-        return "";
+        List<ExcelStudentDataDto> excelStudentDataDtos = documentService.getStudentsFromExcel(fileContent, filename);
+        excelStudentDataDtos.forEach(s -> excelStudentService.createStudentWithRiege(s, Long.parseLong(sporttagId)));
+        return "Imported " + excelStudentDataDtos.size() + " records";
     }
 
     @GetMapping("/sportklasse")

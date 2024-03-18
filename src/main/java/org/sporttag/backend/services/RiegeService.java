@@ -12,8 +12,13 @@ public class RiegeService {
         this.db = db;
     }
 
-    public Riege getDefaultRiegeFromSportklasse(String sportklasse){
-        return db.getDefaultRiegeFromSportklasse(sportklasse);
+    public Long findOrCreateDefaulRiegeForSportklasse(Long sportklasseId){
+        Riege riege = db.getDefaultRiegeFromSportklasseId(sportklasseId);
+        if(riege == null){
+            riege = new Riege(0, true, sportklasseId);
+            return db.save(riege).getId();
+        }
+        return riege.getId();
     }
 
     public void save(Riege riege){

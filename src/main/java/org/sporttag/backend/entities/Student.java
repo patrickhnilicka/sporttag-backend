@@ -17,18 +17,22 @@ public class Student {
     private String klasse;
 
     @ManyToOne
+    @JoinColumn(insertable = false, updatable = false)
     private Riege riege;
+
+    @Column(name="riege_id")
+    private Long riegeId;
 
     public Student() {
     }
 
-    public Student(String vorname, String nachname, String geschlecht, Date geburtsdatum, String klasse, Riege riege) {
+    public Student(String vorname, String nachname, String geschlecht, Date geburtsdatum, String klasse, Long riegeId) {
         this.vorname = vorname;
         this.nachname = nachname;
         this.geschlecht = geschlecht;
         this.geburtsdatum = geburtsdatum;
         this.klasse = klasse;
-        this.riege = riege;
+        this.riegeId = riegeId;
     }
 
     public Long getId() {

@@ -12,13 +12,13 @@ public class SportlehrerService {
         this.db = db;
     }
 
-    public Sportlehrer getOrCreateSportlehrer(String kuerzel) {
+    public Long getOrCreateSportlehrer(String kuerzel) {
         Sportlehrer sportlehrer = db.findSportlehrerByKuerzel(kuerzel);
         if(sportlehrer != null){
-            return sportlehrer;
+            return sportlehrer.getId();
         }
         sportlehrer = new Sportlehrer("", "", kuerzel);
         db.save(sportlehrer);
-        return sportlehrer;
+        return sportlehrer.getId();
     }
 }
