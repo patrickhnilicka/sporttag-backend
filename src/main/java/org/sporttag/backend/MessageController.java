@@ -1,5 +1,6 @@
 package org.sporttag.backend;
 
+import org.sporttag.backend.dto.StudentDto;
 import org.sporttag.backend.entities.Sporttag;
 import org.sporttag.backend.entities.Student;
 import org.sporttag.backend.dto.ExcelStudentDataDto;
@@ -23,14 +24,16 @@ public class MessageController {
     private SportklasseService sportklasseService;
     private SporttagService sporttagService;
     private ExcelStudentCreationService excelStudentService;
+    private RiegeService riegeService;
 
-    public MessageController(StudentService studentService, RestTemplateBuilder restTemplateBuilder, DocumentService documentService, SportklasseService sportklasseService, SporttagService sporttagService, ExcelStudentCreationService excelStudentService) {
+    public MessageController(StudentService studentService, RestTemplateBuilder restTemplateBuilder, DocumentService documentService, SportklasseService sportklasseService, SporttagService sporttagService, ExcelStudentCreationService excelStudentService, RiegeService riegeService) {
         this.studentService = studentService;
         this.restTemplateBuilder = restTemplateBuilder;
         this.documentService = documentService;
         this.sportklasseService = sportklasseService;
         this.sporttagService = sporttagService;
         this.excelStudentService = excelStudentService;
+        this.riegeService = riegeService;
     }
 
     @GetMapping("/students/{sporttagId}")
@@ -45,7 +48,11 @@ public class MessageController {
 
     @PostMapping("/student")
     public void saveStudent(@RequestBody StudentViewModel student){
-        studentService.saveStudent(student);
+        Long riegeId = riegeService.findOrCreateDefaulRiegeForSportklasse(student.getSportklassenId());
+        StudentDto studentDto = new StudentDto(student.getId(), student.getVorname(),
+                student.getNachname(), student.getGeschlecht(), student.getKlasse(),
+                student.getGeburtsdatum(), riegeId);
+        studentService.saveStudent(studentDto);
     }
 
     @DeleteMapping("/student/{id}")

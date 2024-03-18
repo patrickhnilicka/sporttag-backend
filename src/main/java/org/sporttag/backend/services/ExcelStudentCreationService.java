@@ -30,12 +30,12 @@ public class ExcelStudentCreationService {
         Long sportklasseId = getOrCreateSportklasse(sportklasseDto, sporttagId);
 
         Long riegeId = riegeService.findOrCreateDefaulRiegeForSportklasse(sportklasseId);
-        return studentService.createStudentForRiege(new StudentDto(excelStudentDataDto.vorname(),
+        return studentService.createStudentForRiege(new StudentDto(null, excelStudentDataDto.vorname(),
                 excelStudentDataDto.nachname(),
                 excelStudentDataDto.geschlecht(),
                 excelStudentDataDto.klasse(),
                 excelStudentDataDto.geburtstag(),
-                excelStudentDataDto.sportklasse()), riegeId, sporttagId).getId();
+                riegeId), riegeId, sporttagId).getId();
     }
     private Long getOrCreateSportklasse(SportklasseDto sportklasseDto, Long sporttagId){
         Long sportklasseId = sportklasseService.findSportklasseByName(sportklasseDto.name(), sporttagId);

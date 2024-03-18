@@ -59,8 +59,8 @@ public class DocumentService {
     }
 
     private StudentDto toStudentDto(ExcelStudent excelStudent) {
-        return new StudentDto(excelStudent.vorname(), excelStudent.nachname(), excelStudent.gender(),
-                excelStudent.klasseZahl() + excelStudent.klasseBuchstabe(), excelStudent.geburtstag(), excelStudent.sportklasse());
+        return new StudentDto(null, excelStudent.vorname(), excelStudent.nachname(), excelStudent.gender(),
+                excelStudent.klasseZahl() + excelStudent.klasseBuchstabe(), excelStudent.geburtstag(), null);
     }
 
     private SportklasseDto toSportklasseDto(ExcelStudent excelStudent) {

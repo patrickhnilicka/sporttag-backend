@@ -37,13 +37,14 @@ public class StudentService {
         return db.save(student).getId();
     }
 
-    public Long saveStudent(StudentViewModel studentViewModel) {
-        Student student = db.findById(studentViewModel.getId()).get();
-        student.setVorname(studentViewModel.getVorname());
-        student.setNachname(studentViewModel.getNachname());
-        student.setGeschlecht(studentViewModel.getGeschlecht());
-        student.setGeburtsdatum(studentViewModel.getGeburtsdatum());
-        student.setKlasse(studentViewModel.getKlasse());
+    public Long saveStudent(StudentDto studentDto) {
+        Student student = db.findById(studentDto.id()).get();
+        student.setVorname(studentDto.vorname());
+        student.setNachname(studentDto.nachname());
+        student.setGeschlecht(studentDto.geschlecht());
+        student.setGeburtsdatum(studentDto.geburtstag());
+        student.setKlasse(studentDto.klasse());
+        student.setRiegeId(studentDto.riegeId());
         db.save(student);
         return student.getId();
     }

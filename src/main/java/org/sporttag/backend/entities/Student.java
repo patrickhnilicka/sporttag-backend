@@ -90,4 +90,12 @@ public class Student {
     public void setRiege(Riege riege) {
         this.riege = riege;
     }
+
+    public Long getRiegeId() {
+        return riegeId;
+    }
+
+    public void setRiegeId(Long riegeId) {
+        this.riegeId = riegeId;
+    }
 }
