@@ -3,10 +3,6 @@ package org.sporttag.backend.services;
 import org.sporttag.backend.dto.ExcelStudentDataDto;
 import org.sporttag.backend.dto.SportklasseDto;
 import org.sporttag.backend.dto.StudentDto;
-import org.sporttag.backend.entities.Riege;
-import org.sporttag.backend.entities.Sportklasse;
-import org.sporttag.backend.entities.Sportlehrer;
-import org.sporttag.backend.entities.Student;
 import org.springframework.stereotype.Service;
 
 @Service

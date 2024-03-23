@@ -1,8 +1,7 @@
 package org.sporttag.backend.services;
 
-import org.sporttag.backend.entities.Riege;
-import org.sporttag.backend.entities.Student;
 import org.sporttag.backend.dto.StudentDto;
+import org.sporttag.backend.entities.Student;
 import org.sporttag.backend.repositories.StudentRepository;
 import org.sporttag.backend.viewmodels.StudentViewModel;
 import org.springframework.stereotype.Service;

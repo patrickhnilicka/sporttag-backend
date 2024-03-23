@@ -1,6 +1,5 @@
 package org.sporttag.backend.services;
 
-import org.sporttag.backend.dto.SportklasseDto;
 import org.sporttag.backend.entities.Sportklasse;
 import org.sporttag.backend.entities.Sportlehrer;
 import org.sporttag.backend.repositories.SportklasseRepository;
@@ -8,7 +7,6 @@ import org.sporttag.backend.viewmodels.SportklasseViewModel;
 import org.sporttag.backend.viewmodels.SportlehrerViewModel;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Service
