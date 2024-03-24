@@ -43,7 +43,7 @@ public class StudentService {
         student.setGeschlecht(studentDto.geschlecht());
         student.setGeburtsdatum(studentDto.geburtstag());
         student.setKlasse(studentDto.klasse());
-        student.setRiegeId(studentDto.riegeId());
+        student.setSportklasseId(studentDto.sportklasseId());
         db.save(student);
         return student.getId();
     }
@@ -52,16 +52,16 @@ public class StudentService {
         db.delete(student);
     }
 
-    public Student createStudentForRiege(StudentDto studentDto, Long riegeId, Long sporttagId) {
-        Student student = new Student(studentDto.vorname(), studentDto.nachname(), studentDto.geschlecht(), studentDto.geburtstag(), studentDto.klasse(), riegeId);
+    public Student createStudent(StudentDto studentDto, Long sporttagId) {
+        Student student = new Student(studentDto.vorname(), studentDto.nachname(), studentDto.geschlecht(), studentDto.geburtstag(), studentDto.klasse(), studentDto.sportklasseId());
         db.save(student);
         return student;
     }
 
     private StudentViewModel studentToStudentViewModel(Student student) {
-        String sportlehrerKuerzel = student.getRiege() == null ? "" : student.getRiege().getSportklassen().getSportlehrer().getKuerzel(); // falls Student nicht in db
-        String sportklassenName = student.getRiege() == null ? "" : student.getRiege().getSportklassen().getKlassenname();
-        Long sportklassenId = student.getRiege() == null ? 0L : student.getRiege().getSportklassen().getId();
+        String sportlehrerKuerzel = student.getSportklasse().getSportlehrer().getKuerzel(); // falls Student nicht in db
+        String sportklassenName = student.getSportklasse().getKlassenname();
+        Long sportklassenId = student.getSportklasse().getId();
         return new StudentViewModel(student.getId(), student.getVorname(), student.getNachname(), student.getGeschlecht(),
                 student.getGeburtsdatum(), student.getKlasse(), sportklassenName,
                 sportklassenId, sportlehrerKuerzel);

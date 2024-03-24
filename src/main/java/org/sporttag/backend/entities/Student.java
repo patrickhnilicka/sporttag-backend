@@ -23,16 +23,33 @@ public class Student {
     @Column(name="riege_id")
     private Long riegeId;
 
+    @ManyToOne
+    @JoinColumn(insertable = false, updatable = false)
+    private Sportklasse sportklasse;
+
+    @Column(name="sportklasse_id")
+    private Long sportklasseId;
+
     public Student() {
     }
 
-    public Student(String vorname, String nachname, String geschlecht, Date geburtsdatum, String klasse, Long riegeId) {
+    public Student(String vorname, String nachname, String geschlecht, Date geburtsdatum, String klasse, Long riegeId, Long sportklasseId) {
         this.vorname = vorname;
         this.nachname = nachname;
         this.geschlecht = geschlecht;
         this.geburtsdatum = geburtsdatum;
         this.klasse = klasse;
         this.riegeId = riegeId;
+        this.sportklasseId = sportklasseId;
+    }
+
+    public Student(String vorname, String nachname, String geschlecht, Date geburtsdatum, String klasse, Long sportklasseId) {
+        this.vorname = vorname;
+        this.nachname = nachname;
+        this.geschlecht = geschlecht;
+        this.geburtsdatum = geburtsdatum;
+        this.klasse = klasse;
+        this.sportklasseId = sportklasseId;
     }
 
     public Long getId() {
@@ -97,5 +114,17 @@ public class Student {
 
     public void setRiegeId(Long riegeId) {
         this.riegeId = riegeId;
+    }
+
+    public Sportklasse getSportklasse() {
+        return sportklasse;
+    }
+
+    public Long getSportklasseId() {
+        return sportklasseId;
+    }
+
+    public void setSportklasseId(Long sportklasseId) {
+        this.sportklasseId = sportklasseId;
     }
 }

@@ -48,10 +48,9 @@ public class MessageController {
 
     @PostMapping("/student")
     public void saveStudent(@RequestBody StudentViewModel student){
-        Long riegeId = riegeService.findOrCreateDefaulRiegeForSportklasse(student.getSportklassenId());
         StudentDto studentDto = new StudentDto(student.getId(), student.getVorname(),
                 student.getNachname(), student.getGeschlecht(), student.getKlasse(),
-                student.getGeburtsdatum(), riegeId);
+                student.getGeburtsdatum(), student.getSportklassenId());
         studentService.saveStudent(studentDto);
     }
 
@@ -66,7 +65,7 @@ public class MessageController {
         String filename = file.getOriginalFilename();
 
         List<ExcelStudentDataDto> excelStudentDataDtos = documentService.getStudentsFromExcel(fileContent, filename);
-        excelStudentDataDtos.forEach(s -> excelStudentService.createStudentWithRiege(s, Long.parseLong(sporttagId)));
+        excelStudentDataDtos.forEach(s -> excelStudentService.createStudent(s, Long.parseLong(sporttagId)));
         return "Imported " + excelStudentDataDtos.size() + " records";
     }
 
@@ -83,7 +82,7 @@ public class MessageController {
     }
 
     @GetMapping("/currentsporttag")
-    public Sporttag getCurrentSporttag(){ return sporttagService.getAllSporttage().getFirst();}
+    public Sporttag getCurrentSporttag(){ return sporttagService.getAllSporttage().getLast();}
 
     @GetMapping("/sportklassen/{sporttagId}")
     public List<SportklasseViewModel> getSportklassen(@PathVariable Long sporttagId){return sportklasseService.findAllBySporttag(sporttagId);}

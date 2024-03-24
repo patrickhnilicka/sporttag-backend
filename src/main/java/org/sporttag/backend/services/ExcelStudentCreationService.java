@@ -21,17 +21,16 @@ public class ExcelStudentCreationService {
     }
 
     // Creates Student with default Riege, Sportklasse and Sportlehrer if not existent
-    public Long createStudentWithRiege(ExcelStudentDataDto excelStudentDataDto, Long sporttagId) {
+    public Long createStudent(ExcelStudentDataDto excelStudentDataDto, Long sporttagId) {
         SportklasseDto sportklasseDto = new SportklasseDto(excelStudentDataDto.sportklasse(),excelStudentDataDto.sportlehrerkuerzel());
         Long sportklasseId = getOrCreateSportklasse(sportklasseDto, sporttagId);
 
-        Long riegeId = riegeService.findOrCreateDefaulRiegeForSportklasse(sportklasseId);
-        return studentService.createStudentForRiege(new StudentDto(null, excelStudentDataDto.vorname(),
+        return studentService.createStudent(new StudentDto(null, excelStudentDataDto.vorname(),
                 excelStudentDataDto.nachname(),
                 excelStudentDataDto.geschlecht(),
                 excelStudentDataDto.klasse(),
                 excelStudentDataDto.geburtstag(),
-                riegeId), riegeId, sporttagId).getId();
+                sportklasseId), sporttagId).getId();
     }
     private Long getOrCreateSportklasse(SportklasseDto sportklasseDto, Long sporttagId){
         Long sportklasseId = sportklasseService.findSportklasseByName(sportklasseDto.name(), sporttagId);

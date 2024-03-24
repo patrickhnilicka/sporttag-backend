@@ -10,7 +10,7 @@ import java.util.List;
 
 //@Repository
 public interface StudentRepository extends ListCrudRepository<Student, Long> {
-    @Query("SELECT s FROM Student s WHERE s.riege.sportklassen.sporttagId = :sporttagId")
+    @Query("SELECT s FROM Student s WHERE s.sportklasse.sporttagId = :sporttagId")
     List<Student> getAllBySporttagId(@Param("sporttagId") long sporttagId);
 }
 

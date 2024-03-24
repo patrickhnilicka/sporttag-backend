@@ -25,19 +25,14 @@ CREATE TABLE IF NOT EXISTS sportklasse
             ON UPDATE RESTRICT,
     CONSTRAINT `fk_sportklasse_sporttag`
         FOREIGN KEY (sporttag_id) REFERENCES sporttag (id)
-            ON DELETE CASCADE
+            ON DELETE RESTRICT
             ON UPDATE RESTRICT
 );
 
 CREATE TABLE IF NOT EXISTS riege
 (
     id              MEDIUMINT AUTO_INCREMENT PRIMARY KEY,
-    nummer          TINYINT UNSIGNED,
-    sportklassen_id MEDIUMINT,
-    CONSTRAINT `fk_riege_sportklasse`
-        FOREIGN KEY (sportklassen_id) REFERENCES sportklasse (id)
-            ON DELETE CASCADE
-            ON UPDATE RESTRICT
+    nummer          TINYINT UNSIGNED
 );
 
 CREATE TABLE IF NOT EXISTS student
@@ -49,12 +44,13 @@ CREATE TABLE IF NOT EXISTS student
     geburtsdatum DATE         NOT NULL,
     klasse       VARCHAR(2)   NOT NULL,
     riege_id     MEDIUMINT,
+    sportklasse_id MEDIUMINT NOT NULL,
     CONSTRAINT `fk_student_riege`
         FOREIGN KEY (riege_id) REFERENCES riege (id)
-            ON DELETE CASCADE
+            ON DELETE RESTRICT
+            ON UPDATE RESTRICT,
+    CONSTRAINT `fk_riege_sportklasse`
+        FOREIGN KEY (sportklasse_id) REFERENCES sportklasse (id)
+            ON DELETE RESTRICT
             ON UPDATE RESTRICT
 );
-
-ALTER TABLE riege ADD COLUMN IF NOT EXISTS  (isdefault BOOLEAN NOT NULL);
-ALTER TABLE riege
-    ADD UNIQUE INDEX IF NOT EXISTS (isdefault, sportklassen_id);
