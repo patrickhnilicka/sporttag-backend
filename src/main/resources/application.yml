@@ -1,0 +1,12 @@
+server:
+    port: 8081
+spring:
+    datasource:
+        driver-class-name: org.mariadb.jdbc.Driver
+        password: mypass
+        url: jdbc:mariadb://127.0.0.1:3306/sporttag
+        username: root
+    sql:
+        init:
+            mode: always
+            schema-locations: classpath:schema.sql
