@@ -6,7 +6,11 @@ spring:
         password: mypass
         url: jdbc:mariadb://127.0.0.1:3306/sporttag
         username: root
-    sql:
+    security:
+        oauth2:
+            resourceserver:
+                jwt:
+                    issuer-uri: http://localhost:8080/realms/sporttag
         init:
             mode: always
             schema-locations: classpath:schema.sql
