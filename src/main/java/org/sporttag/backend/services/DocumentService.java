@@ -1,14 +1,13 @@
 package org.sporttag.backend.services;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.sporttag.backend.dto.ExcelStudentDataDto;
 import org.sporttag.backend.dto.SportklasseDto;
-import org.sporttag.backend.dto.StudentDto;
+import org.sporttag.backend.dto.SportklasseStudentDto;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.ContentDisposition;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -17,11 +16,14 @@ import org.springframework.web.client.RestTemplate;
 import java.sql.Date;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class DocumentService {
 
-    public static final String URL = "http://localhost:8081/api/v1/get-students";
+    public static final String URL = "http://localhost:8082/api/v1";
     private RestTemplateBuilder restTemplateBuilder;
 
     public DocumentService(RestTemplateBuilder restTemplateBuilder) {
@@ -49,8 +51,24 @@ public class DocumentService {
                 = new HttpEntity<>(body, headers);
 
         RestTemplate restTemplate = restTemplateBuilder.build();
-        ExcelStudent[] excelStudents = restTemplate.postForObject(URL, requestEntity, ExcelStudent[].class);
+        ExcelStudent[] excelStudents = restTemplate.postForObject(URL + "/get-students", requestEntity, ExcelStudent[].class);
         return toExcelDataDto(Arrays.stream(excelStudents).toList());
+    }
+
+    public byte[] getZipWithRiegenExcels(List<SportklasseStudentDto> sportklassen) throws JsonProcessingException {
+        Map<String, SportklasseStudentDto> sportklassenByName = sportklassen.stream().collect(Collectors.toMap(SportklasseStudentDto::klassenname, Function.identity()));
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        ObjectMapper mapper = new ObjectMapper();
+        String json;
+        json = mapper.writeValueAsString(sportklassenByName);
+        HttpEntity<String> request =
+                new HttpEntity<String>(json, headers);
+
+        ResponseEntity<byte[]> responseEntity = restTemplate.
+                postForEntity(URL + "/sportlehrerexcel", request, byte[].class);
+        return responseEntity.getBody();
     }
 
     private List<ExcelStudentDataDto> toExcelDataDto(List<ExcelStudent> excelStudents) {

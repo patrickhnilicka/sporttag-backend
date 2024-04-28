@@ -1,6 +1,5 @@
 package org.sporttag.backend.repositories;
 
-import org.sporttag.backend.entities.Riege;
 import org.sporttag.backend.entities.Student;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;

@@ -1,5 +1,6 @@
 package org.sporttag.backend;
 
+import org.sporttag.backend.dto.SportklasseStudentDto;
 import org.sporttag.backend.dto.StudentDto;
 import org.sporttag.backend.entities.Sporttag;
 import org.sporttag.backend.entities.Student;
@@ -8,6 +9,7 @@ import org.sporttag.backend.services.*;
 import org.sporttag.backend.viewmodels.SportklasseViewModel;
 import org.sporttag.backend.viewmodels.StudentViewModel;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,10 +25,10 @@ public class MessageController {
     private DocumentService documentService;
     private SportklasseService sportklasseService;
     private SporttagService sporttagService;
-    private ExcelStudentCreationService excelStudentService;
+    private ExcelStudentService excelStudentService;
     private RiegeService riegeService;
 
-    public MessageController(StudentService studentService, RestTemplateBuilder restTemplateBuilder, DocumentService documentService, SportklasseService sportklasseService, SporttagService sporttagService, ExcelStudentCreationService excelStudentService, RiegeService riegeService) {
+    public MessageController(StudentService studentService, RestTemplateBuilder restTemplateBuilder, DocumentService documentService, SportklasseService sportklasseService, SporttagService sporttagService, ExcelStudentService excelStudentService, RiegeService riegeService) {
         this.studentService = studentService;
         this.restTemplateBuilder = restTemplateBuilder;
         this.documentService = documentService;
@@ -86,4 +88,10 @@ public class MessageController {
 
     @GetMapping("/sportklassen/{sporttagId}")
     public List<SportklasseViewModel> getSportklassen(@PathVariable Long sporttagId){return sportklasseService.findAllBySporttag(sporttagId);}
+
+    @GetMapping(value = "/riegenExcel/{sporttagId}", produces="application/zip")
+    public @ResponseBody byte[] getRiegenExcel(@PathVariable Long sporttagId) throws Exception {
+        List<SportklasseStudentDto> sportklasseStudentDtos = sportklasseService.findAllWithStudentsBySporttag(sporttagId);
+        return documentService.getZipWithRiegenExcels(sportklasseStudentDtos);
+    }
 }

@@ -1,5 +1,7 @@
 package org.sporttag.backend.services;
 
+import org.sporttag.backend.dto.SportklasseStudentDto;
+import org.sporttag.backend.dto.StudentDto;
 import org.sporttag.backend.entities.Sportklasse;
 import org.sporttag.backend.entities.Sportlehrer;
 import org.sporttag.backend.repositories.SportklasseRepository;
@@ -44,6 +46,12 @@ public class SportklasseService {
     }
     public List<SportklasseViewModel> findAllBySporttag(Long sporttagId){ return db.findAllBySporttag(sporttagId).stream().map(s -> toSportklasseViewModel(s)).toList();}
 
+    public List<SportklasseStudentDto> findAllWithStudentsBySporttag(Long sporttagId){
+        return db.findAllBySporttag(sporttagId).stream().map(s -> new SportklasseStudentDto(s.getKlassenname(),
+                s.getSportlehrer().getKuerzel(), s.getStudents().stream().map(st ->
+                new StudentDto(st.getId(), st.getVorname(), st.getNachname(), st.getGeschlecht(), st.getKlasse(),
+                        st.getGeburtsdatum(), st.getSportklasseId())).toList())).toList();
+    }
     private SportklasseViewModel toSportklasseViewModel(Sportklasse sportklasse){
         return new SportklasseViewModel(sportklasse.getId(), sportklasse.getKlassenname(), toSportlehrerViewModel(sportklasse.getSportlehrer()));
     }

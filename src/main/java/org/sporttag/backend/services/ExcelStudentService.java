@@ -5,15 +5,17 @@ import org.sporttag.backend.dto.SportklasseDto;
 import org.sporttag.backend.dto.StudentDto;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
-public class ExcelStudentCreationService {
+public class ExcelStudentService {
     private StudentService studentService;
     private RiegeService riegeService;
     private SportklasseService sportklasseService;
     private SportlehrerService sportlehrerService;
 
-    public ExcelStudentCreationService(StudentService studentService, RiegeService riegeService,
-                                       SportklasseService sportklasseService, SportlehrerService sportlehrerService) {
+    public ExcelStudentService(StudentService studentService, RiegeService riegeService,
+                               SportklasseService sportklasseService, SportlehrerService sportlehrerService) {
         this.studentService = studentService;
         this.riegeService = riegeService;
         this.sportklasseService = sportklasseService;
@@ -32,6 +34,7 @@ public class ExcelStudentCreationService {
                 excelStudentDataDto.geburtstag(),
                 sportklasseId), sporttagId).getId();
     }
+
     private Long getOrCreateSportklasse(SportklasseDto sportklasseDto, Long sporttagId){
         Long sportklasseId = sportklasseService.findSportklasseByName(sportklasseDto.name(), sporttagId);
         if(sportklasseId != null){
