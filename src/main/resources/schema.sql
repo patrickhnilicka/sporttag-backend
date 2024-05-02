@@ -32,7 +32,12 @@ CREATE TABLE IF NOT EXISTS sportklasse
 CREATE TABLE IF NOT EXISTS riege
 (
     id              MEDIUMINT AUTO_INCREMENT PRIMARY KEY,
-    nummer          TINYINT UNSIGNED
+    nummer          TINYINT UNSIGNED,
+    sporttag_id    MEDIUMINT,
+    CONSTRAINT `fk_riege_sporttag`
+        FOREIGN KEY (sporttag_id) REFERENCES sporttag (id)
+            ON DELETE RESTRICT
+            ON UPDATE RESTRICT
 );
 
 CREATE TABLE IF NOT EXISTS student

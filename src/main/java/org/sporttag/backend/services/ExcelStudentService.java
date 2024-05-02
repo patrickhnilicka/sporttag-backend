@@ -32,7 +32,7 @@ public class ExcelStudentService {
                 excelStudentDataDto.geschlecht(),
                 excelStudentDataDto.klasse(),
                 excelStudentDataDto.geburtstag(),
-                sportklasseId), sporttagId).getId();
+                sportklasseId, null), sporttagId).getId();
     }
 
     private Long getOrCreateSportklasse(SportklasseDto sportklasseDto, Long sporttagId){

@@ -11,5 +11,8 @@ import java.util.List;
 public interface StudentRepository extends ListCrudRepository<Student, Long> {
     @Query("SELECT s FROM Student s WHERE s.sportklasse.sporttagId = :sporttagId")
     List<Student> getAllBySporttagId(@Param("sporttagId") long sporttagId);
+
+    @Query("SELECT s FROM Student s WHERE s.riegeId = :riegeId")
+    List<Student> getAllByRiegeId(@Param("riegeId") long riegeId);
 }
 

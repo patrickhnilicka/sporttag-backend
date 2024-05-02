@@ -1,15 +1,13 @@
 package org.sporttag.backend;
 
-import org.sporttag.backend.dto.SportklasseStudentDto;
-import org.sporttag.backend.dto.StudentDto;
+import org.sporttag.backend.dto.*;
 import org.sporttag.backend.entities.Sporttag;
 import org.sporttag.backend.entities.Student;
-import org.sporttag.backend.dto.ExcelStudentDataDto;
 import org.sporttag.backend.services.*;
+import org.sporttag.backend.viewmodels.RiegenzuteilungViewModel;
 import org.sporttag.backend.viewmodels.SportklasseViewModel;
 import org.sporttag.backend.viewmodels.StudentViewModel;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,21 +24,23 @@ public class MessageController {
     private SportklasseService sportklasseService;
     private SporttagService sporttagService;
     private ExcelStudentService excelStudentService;
+    private RiegenzuteilungService riegenzuteilungService;
     private RiegeService riegeService;
 
-    public MessageController(StudentService studentService, RestTemplateBuilder restTemplateBuilder, DocumentService documentService, SportklasseService sportklasseService, SporttagService sporttagService, ExcelStudentService excelStudentService, RiegeService riegeService) {
+    public MessageController(StudentService studentService, RestTemplateBuilder restTemplateBuilder, DocumentService documentService, SportklasseService sportklasseService, SporttagService sporttagService, ExcelStudentService excelStudentService, RiegenzuteilungService riegenzuteilungService, RiegeService riegeService) {
         this.studentService = studentService;
         this.restTemplateBuilder = restTemplateBuilder;
         this.documentService = documentService;
         this.sportklasseService = sportklasseService;
         this.sporttagService = sporttagService;
         this.excelStudentService = excelStudentService;
+        this.riegenzuteilungService = riegenzuteilungService;
         this.riegeService = riegeService;
     }
 
     @GetMapping("/students/{sporttagId}")
-    List<StudentViewModel> getStudents(@PathVariable Long sporttagId){
-        return studentService.getStudents(sporttagId);
+    List<StudentViewModel> getStudents(@PathVariable Long sporttagId) {
+        return studentService.getStudentViewmodels(sporttagId);
     }
 
     @GetMapping("/student/{id}")
@@ -49,15 +49,15 @@ public class MessageController {
     }
 
     @PostMapping("/student")
-    public void saveStudent(@RequestBody StudentViewModel student){
+    public void saveStudent(@RequestBody StudentViewModel student) {
         StudentDto studentDto = new StudentDto(student.getId(), student.getVorname(),
                 student.getNachname(), student.getGeschlecht(), student.getKlasse(),
-                student.getGeburtsdatum(), student.getSportklassenId());
+                student.getGeburtsdatum(), student.getSportklassenId(), null);
         studentService.saveStudent(studentDto);
     }
 
     @DeleteMapping("/student/{id}")
-    public void deleteStudent(Student student){
+    public void deleteStudent(Student student) {
         studentService.deleteStudent(student);
     }
 
@@ -79,19 +79,38 @@ public class MessageController {
     }
 
     @GetMapping("/sporttag")
-    public List<Sporttag> getSporttage(){
+    public List<Sporttag> getSporttage() {
         return sporttagService.getAllSporttage();
     }
 
+    @GetMapping("/riege/{sporttagId}")
+    List<RiegeDto> getRiegen(@PathVariable Long sporttagId) {
+        return riegeService.getRieges(sporttagId);
+    }
+
     @GetMapping("/currentsporttag")
-    public Sporttag getCurrentSporttag(){ return sporttagService.getAllSporttage().getLast();}
+    public Sporttag getCurrentSporttag() {
+        return sporttagService.getAllSporttage().getLast();
+    }
 
     @GetMapping("/sportklassen/{sporttagId}")
-    public List<SportklasseViewModel> getSportklassen(@PathVariable Long sporttagId){return sportklasseService.findAllBySporttag(sporttagId);}
+    public List<SportklasseViewModel> getSportklassen(@PathVariable Long sporttagId) {
+        return sportklasseService.findAllBySporttag(sporttagId);
+    }
 
-    @GetMapping(value = "/riegenExcel/{sporttagId}", produces="application/zip")
+    @GetMapping(value = "/riegenExcel/{sporttagId}", produces = "application/zip")
     public @ResponseBody byte[] getRiegenExcel(@PathVariable Long sporttagId) throws Exception {
         List<SportklasseStudentDto> sportklasseStudentDtos = sportklasseService.findAllWithStudentsBySporttag(sporttagId);
         return documentService.getZipWithRiegenExcels(sportklasseStudentDtos);
+    }
+
+    @GetMapping("/riegenzuteilung/{sporttagId}")
+    public List<RiegenzuteilungViewModel> getRiegenzuteilung(@PathVariable Long sporttagId) {
+        return riegenzuteilungService.getRiegenzuteilungen(sporttagId);
+    }
+
+    @PostMapping(value="/riegenzuteilung")
+    public void saveRiegenzuteilung(@RequestBody RiegenzuteilungDto riegenzuteilung){
+        riegenzuteilungService.saveRiegenzuteilung(riegenzuteilung);
     }
 }

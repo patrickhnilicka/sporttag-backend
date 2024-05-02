@@ -10,6 +10,10 @@ import org.sporttag.backend.viewmodels.SportlehrerViewModel;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class SportklasseService {
@@ -50,7 +54,10 @@ public class SportklasseService {
         return db.findAllBySporttag(sporttagId).stream().map(s -> new SportklasseStudentDto(s.getKlassenname(),
                 s.getSportlehrer().getKuerzel(), s.getStudents().stream().map(st ->
                 new StudentDto(st.getId(), st.getVorname(), st.getNachname(), st.getGeschlecht(), st.getKlasse(),
-                        st.getGeburtsdatum(), st.getSportklasseId())).toList())).toList();
+                        st.getGeburtsdatum(), st.getSportklasseId(), st.getRiegeId())).toList())).toList();
+    }
+    public Map<Long, String> findAllById(Set<Long> ids){
+        return db.findAllById(ids).stream().collect(Collectors.toMap(Sportklasse::getId, Sportklasse::getKlassenname));
     }
     private SportklasseViewModel toSportklasseViewModel(Sportklasse sportklasse){
         return new SportklasseViewModel(sportklasse.getId(), sportklasse.getKlassenname(), toSportlehrerViewModel(sportklasse.getSportlehrer()));

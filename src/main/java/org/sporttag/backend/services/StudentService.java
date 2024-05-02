@@ -26,9 +26,14 @@ public class StudentService {
         return db.findById(id);
     }
 
-    public List<StudentViewModel> getStudents(Long sporttagId) {
+    public List<StudentViewModel> getStudentViewmodels(Long sporttagId) {
         List<Student> students = db.getAllBySporttagId(sporttagId);
         return students.stream().map(s -> studentToStudentViewModel(s)).toList();
+    }
+
+    public List<StudentDto> getStudents(Long sporttagId) {
+        List<Student> students = db.getAllBySporttagId(sporttagId);
+        return students.stream().map(s -> toStudentDto(s)).toList();
     }
 
     public Long saveStudent(Student student) {
@@ -57,6 +62,20 @@ public class StudentService {
         return student;
     }
 
+    public List<StudentDto> studentsByRiegeId(Long riegeId) {
+        return db.getAllByRiegeId(riegeId).stream().map(s -> toStudentDto(s)).toList();
+    }
+
+    public void saveRiegeOnStudent(long studentId, long riegeId) {
+        Optional<Student> student = db.findById(studentId);
+        if (student.isPresent()) {
+            student.get().setRiegeId(riegeId);
+            db.save(student.get());
+        } else {
+            System.out.println("student with Id" + studentId + "not found in db.");
+        }
+    }
+
     private StudentViewModel studentToStudentViewModel(Student student) {
         String sportlehrerKuerzel = student.getSportklasse().getSportlehrer().getKuerzel(); // falls Student nicht in db
         String sportklassenName = student.getSportklasse().getKlassenname();
@@ -64,5 +83,10 @@ public class StudentService {
         return new StudentViewModel(student.getId(), student.getVorname(), student.getNachname(), student.getGeschlecht(),
                 student.getGeburtsdatum(), student.getKlasse(), sportklassenName,
                 sportklassenId, sportlehrerKuerzel);
+    }
+
+    private StudentDto toStudentDto(Student student) {
+        return new StudentDto(student.getId(), student.getVorname(), student.getNachname(), student.getGeschlecht(),
+                student.getKlasse(), student.getGeburtsdatum(), student.getSportklasseId(), student.getRiegeId());
     }
 }
