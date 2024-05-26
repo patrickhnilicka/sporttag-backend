@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.sporttag.backend.dto.ExcelStudentDataDto;
 import org.sporttag.backend.dto.SportklasseDto;
 import org.sporttag.backend.dto.SportklasseStudentDto;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -22,8 +23,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class DocumentService {
-
-    public static final String URL = "http://localhost:8082/api/v1";
+    @Value("${documentservice.url}")
+    public String URL;
     private RestTemplateBuilder restTemplateBuilder;
 
     public DocumentService(RestTemplateBuilder restTemplateBuilder) {
@@ -65,10 +66,15 @@ public class DocumentService {
         json = mapper.writeValueAsString(sportklassenByName);
         HttpEntity<String> request =
                 new HttpEntity<String>(json, headers);
-
         ResponseEntity<byte[]> responseEntity = restTemplate.
                 postForEntity(URL + "/sportlehrerexcel", request, byte[].class);
         return responseEntity.getBody();
+    }
+
+    public String getHello(){
+        RestTemplate restTemplate = restTemplateBuilder.build();
+        String message = restTemplate.getForObject(URL + "/hello", String.class);
+        return message;
     }
 
     private List<ExcelStudentDataDto> toExcelDataDto(List<ExcelStudent> excelStudents) {

@@ -9,13 +9,16 @@ import org.sporttag.backend.viewmodels.SportklasseViewModel;
 import org.sporttag.backend.viewmodels.StudentViewModel;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
+//@CrossOrigin(origins = "http://localhost:5173")
+@RequestMapping("/api/v1")
 public class MessageController {
 
     private StudentService studentService;
@@ -112,5 +115,10 @@ public class MessageController {
     @PostMapping(value="/riegenzuteilung")
     public void saveRiegenzuteilung(@RequestBody RiegenzuteilungDto riegenzuteilung){
         riegenzuteilungService.saveRiegenzuteilung(riegenzuteilung);
+    }
+
+    @GetMapping("/hellodocumentservice")
+    public String helloDocumentService() {
+        return documentService.getHello();
     }
 }

@@ -1,0 +1,20 @@
+server:
+  port: 8080
+  error:
+    path: /error
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://login.sporttagimlee.ch/realms/sporttag
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    password: Venezia_2024
+    url: jdbc:mariadb://sporttag-db.cf0m6a8wadoh.eu-central-2.rds.amazonaws.com:3306/sporttag
+    username: admin
+
+documentservice:
+  url: http://192.168.92.22:8080/api/v1
+
+environmentname: prod

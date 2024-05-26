@@ -1,16 +1,9 @@
 server:
     port: 8081
+    error:
+        path: /error
 spring:
-    datasource:
-        driver-class-name: org.mariadb.jdbc.Driver
-        password: mypass
-        url: jdbc:mariadb://127.0.0.1:3306/sporttag
-        username: root
-    security:
-        oauth2:
-            resourceserver:
-                jwt:
-                    issuer-uri: http://localhost:8080/realms/sporttag
+    sql:
         init:
             mode: always
             schema-locations: classpath:schema.sql
