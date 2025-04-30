@@ -64,7 +64,7 @@ public class SportklasseService {
     }
 
     private SportlehrerViewModel toSportlehrerViewModel(Sportlehrer sportlehrer){
-        return new SportlehrerViewModel(sportlehrer.getVorname(), sportlehrer.getNachname(), sportlehrer.getKuerzel());
+        return new SportlehrerViewModel(sportlehrer.getId(), sportlehrer.getVorname(), sportlehrer.getNachname(), sportlehrer.getKuerzel());
     }
 
 }

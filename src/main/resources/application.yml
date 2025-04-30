@@ -7,3 +7,9 @@ spring:
         init:
             mode: always
             schema-locations: classpath:schema.sql
+java:
+    util:
+        logging:
+            manager: org.apache.logging.log4j.jul.LogManager
+log4j:
+    configuration: ./log4j.properties

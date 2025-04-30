@@ -1,6 +1,6 @@
 FROM gradle:latest AS build
 WORKDIR /app
-COPY build.gradle.kts .
+COPY build.gradle .
 COPY src ./src
 RUN gradle clean assemble
 

@@ -3,9 +3,7 @@ package org.sporttag.backend.services;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.sporttag.backend.dto.ExcelStudentDataDto;
-import org.sporttag.backend.dto.SportklasseDto;
-import org.sporttag.backend.dto.SportklasseStudentDto;
+import org.sporttag.backend.dto.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
@@ -56,6 +54,31 @@ public class DocumentService {
         return toExcelDataDto(Arrays.stream(excelStudents).toList());
     }
 
+    public List<ExcelRiegenzuteilungDto> getRiegenzuteilungFromExcel(byte[] file, String filename) {
+        MultiValueMap<String, String> fileMap = new LinkedMultiValueMap<>();
+        ContentDisposition contentDisposition = ContentDisposition
+                .builder("form-data")
+                .name("file")
+                .filename(filename)
+                .build();
+
+        fileMap.add(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString());
+        HttpEntity<byte[]> fileEntity = new HttpEntity<>(file, fileMap);
+
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        body.add("file", fileEntity);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+        HttpEntity<MultiValueMap<String, Object>> requestEntity
+                = new HttpEntity<>(body, headers);
+
+        RestTemplate restTemplate = restTemplateBuilder.build();
+        ExcelRiegenzuteilungDto[] riegenzuteilungDtos = restTemplate.postForObject(URL + "/get-riegenzuteilung", requestEntity, ExcelRiegenzuteilungDto[].class);
+        return Arrays.stream(riegenzuteilungDtos).toList();
+    }
+
     public byte[] getZipWithRiegenExcels(List<SportklasseStudentDto> sportklassen) throws JsonProcessingException {
         Map<String, SportklasseStudentDto> sportklassenByName = sportklassen.stream().collect(Collectors.toMap(SportklasseStudentDto::klassenname, Function.identity()));
         RestTemplate restTemplate = new RestTemplate();
@@ -82,8 +105,8 @@ public class DocumentService {
                 es.klasseBuchstabe() + es.klasseBuchstabe(),es.geburtstag(), es.sportklasse(), es.lehrpersonKuerzel())).toList();
     }
 
-    private SportklasseDto toSportklasseDto(ExcelStudent excelStudent) {
-        return new SportklasseDto(excelStudent.sportklasse(), excelStudent.lehrpersonKuerzel());
+    private RiegenzuteilungDto toRiegenzuteilungDto(ExcelRiegenzuteilungDto excelRiegenzuteilungDto, Long sporttagId) {
+        return new RiegenzuteilungDto(excelRiegenzuteilungDto.studentId(), excelRiegenzuteilungDto.riegeId(), sporttagId);
     }
 }
 

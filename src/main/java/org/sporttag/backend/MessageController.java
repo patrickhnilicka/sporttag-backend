@@ -1,18 +1,19 @@
 package org.sporttag.backend;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sporttag.backend.dto.*;
 import org.sporttag.backend.entities.Sporttag;
 import org.sporttag.backend.entities.Student;
 import org.sporttag.backend.services.*;
 import org.sporttag.backend.viewmodels.RiegenzuteilungViewModel;
 import org.sporttag.backend.viewmodels.SportklasseViewModel;
+import org.sporttag.backend.viewmodels.SportlehrerViewModel;
 import org.sporttag.backend.viewmodels.StudentViewModel;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +21,8 @@ import java.util.Map;
 //@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api/v1")
 public class MessageController {
+    Logger logger = LoggerFactory.getLogger(MessageController.class);
+
 
     private StudentService studentService;
     private RestTemplateBuilder restTemplateBuilder;
@@ -29,8 +32,9 @@ public class MessageController {
     private ExcelStudentService excelStudentService;
     private RiegenzuteilungService riegenzuteilungService;
     private RiegeService riegeService;
+    private SportlehrerService sportlehrerService;
 
-    public MessageController(StudentService studentService, RestTemplateBuilder restTemplateBuilder, DocumentService documentService, SportklasseService sportklasseService, SporttagService sporttagService, ExcelStudentService excelStudentService, RiegenzuteilungService riegenzuteilungService, RiegeService riegeService) {
+    public MessageController(StudentService studentService, RestTemplateBuilder restTemplateBuilder, DocumentService documentService, SportklasseService sportklasseService, SporttagService sporttagService, ExcelStudentService excelStudentService, RiegenzuteilungService riegenzuteilungService, RiegeService riegeService, SportlehrerService sportlehrerService) {
         this.studentService = studentService;
         this.restTemplateBuilder = restTemplateBuilder;
         this.documentService = documentService;
@@ -39,6 +43,7 @@ public class MessageController {
         this.excelStudentService = excelStudentService;
         this.riegenzuteilungService = riegenzuteilungService;
         this.riegeService = riegeService;
+        this.sportlehrerService = sportlehrerService;
     }
 
     @GetMapping("/students/{sporttagId}")
@@ -116,9 +121,30 @@ public class MessageController {
     public void saveRiegenzuteilung(@RequestBody RiegenzuteilungDto riegenzuteilung){
         riegenzuteilungService.saveRiegenzuteilung(riegenzuteilung);
     }
+    @PostMapping(value = "/riegenZuteilungFromExcel")
+    public String uploadRiegenzuteilungFromExcel(@RequestParam("file") MultipartFile file, @RequestParam("sporttagid") String sporttagIdString) throws Exception {
+        byte[] fileContent = file.getBytes();
+        String filename = file.getOriginalFilename();
+        Long sporttagId = Long.parseLong(sporttagIdString);
+
+        List<RiegenzuteilungDto> riegenzuteilungDtos = documentService.getRiegenzuteilungFromExcel(fileContent, filename)
+                .stream()
+                .map(z -> new RiegenzuteilungDto(z.studentId(), z.riegeId(), sporttagId))
+                .toList();
+        riegenzuteilungDtos.forEach(s -> riegenzuteilungService.saveRiegenzuteilung(s));
+        return "Imported " + riegenzuteilungDtos.size() + " records";
+    }
 
     @GetMapping("/hellodocumentservice")
     public String helloDocumentService() {
         return documentService.getHello();
+    }
+    @GetMapping("/sportlehrer")
+    List<SportlehrerViewModel> getSportlehrers() {
+        return sportlehrerService.getAll();
+    }
+    @PostMapping("/sportlehrer")
+    public void saveSportlehrer(@RequestBody SportlehrerViewModel sportlehrer){
+        sportlehrerService.saveSportlehrer(sportlehrer);
     }
 }
